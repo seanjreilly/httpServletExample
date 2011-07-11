@@ -1,0 +1,8 @@
+//servletApi = "javax:javaee-web-api:6.0"
+servletApi = "org.apache.tomcat:tomcat-servlet-api:7.0.16"
+
+///////////////////////////////////////////////
+//Test dependencies
+///////////////////////////////////////////////
+junit = "junit:junit:4.8.2"
+mockito = "org.mockito:mockito-all:1.8.5"

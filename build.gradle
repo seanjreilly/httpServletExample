@@ -1,0 +1,17 @@
+apply plugin: "java"
+apply plugin: "war"
+apply from: "external-dependencies.gradle"
+
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+apply from: "ide-support.gradle"
+
+repositories {
+    mavenCentral()
+    mavenRepo name: "java.net", urls: ["http://download.java.net/maven/2/"]
+}
+
+dependencies {
+    providedCompile servletApi
+    testCompile junit, mockito
+}
