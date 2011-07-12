@@ -4,3 +4,5 @@
 .gradle
 build
 out
+work
+tomcat.12345

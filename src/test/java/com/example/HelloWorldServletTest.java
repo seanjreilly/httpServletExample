@@ -3,17 +3,13 @@ package com.example;
 import org.junit.Test;
 
 import javax.servlet.Servlet;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class HelloWorldServletTest {
 

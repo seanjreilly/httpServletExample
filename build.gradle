@@ -13,5 +13,5 @@ repositories {
 
 dependencies {
     providedCompile servletApi
-    testCompile junit, mockito
+    testCompile junit, mockito, embeddedTomcat
 }

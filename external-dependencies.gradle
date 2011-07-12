@@ -6,3 +6,4 @@ servletApi = "org.apache.tomcat:tomcat-servlet-api:7.0.16"
 ///////////////////////////////////////////////
 junit = "junit:junit:4.8.2"
 mockito = "org.mockito:mockito-all:1.8.5"
+embeddedTomcat = ["org.apache.tomcat.embed:tomcat-embed-core:7.0.16", "org.apache.tomcat:tomcat-catalina:7.0.16"]
