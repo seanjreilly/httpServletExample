@@ -8,7 +8,7 @@ apply from: "ide-support.gradle"
 
 repositories {
     mavenCentral()
-    mavenRepo name: "java.net", urls: ["http://download.java.net/maven/2/"]
+    mavenRepo name: "java.net", url: "http://download.java.net/maven/2/"
 }
 
 dependencies {

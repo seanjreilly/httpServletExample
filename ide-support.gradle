@@ -2,32 +2,16 @@ allprojects {
     apply plugin: 'idea'
 }
 
-//ideaModule.enabled = false
-//ideaProject.subprojects.remove(project)
+idea.project.ipr {
 
-ideaProject {
     def vcsMappings = [svn: "svn info", hg4idea: "hg status", Git: "git status"]
 
     withXml { provider ->
 
-        def scalaEnabledProjects = project.allprojects.findAll { it.plugins.hasPlugin('scala') }
-        if (scalaEnabledProjects.size() > 0) {
-            println "\tFound ${scalaEnabledProjects.size()} projects that use the 'scala' plugin. Configuring scala support in the ide"
-
-            def highlightingAdvisor = provider.asNode().appendNode('component', [name: 'HighlightingAdvisor'])
-            highlightingAdvisor.appendNode('option', [name: 'SUGGEST_TYPE_AWARE_HIGHLIGHTING', value: 'false'])
-            highlightingAdvisor.appendNode('option', [name: 'TYPE_AWARE_HIGHLIGHTING_ENABLED', value: 'true'])
-
-            def library = provider.asNode().appendNode('component', [name:'libraryTable']).appendNode('library', [name: "scala-compiler-${getScalaVersion()}"]).appendNode('CLASSES')
-            getScalaArtifacts().each {
-                library.appendNode('root', [url: "jar://${it.file.absolutePath}!/"])
-            }
-        }
-
         def vcs = vcsMappings.find {
             try {
-                it.value.execute(null, rootProject.projectDir).waitFor() == 0
-            } catch (Exception e) {
+                it.value.execute([], (File) rootProject.projectDir).waitFor() == 0
+            } catch (Exception ignore) {
                 return false
             }
         }
@@ -38,22 +22,11 @@ ideaProject {
     }
 }
 
-ideaWorkspace {
-  withXml { provider ->
-    def runManagerComponent = provider.asNode().component.find { it.'@name' == 'RunManager'}
-    def defaultJunitConfig = runManagerComponent.configuration.find {(it.'@default' == 'true') && (it.'@type' == 'JUnit')}
-    def workingDirectoryOption = defaultJunitConfig.option.find {it.'@name' == 'WORKING_DIRECTORY'}
-    workingDirectoryOption.'@value' = '$MODULE_DIR$'
-    defaultJunitConfig.envs[0].appendNode("env", [name: "CONFIG_ENV", value: "local"])
-  }
-}
-
-String getScalaVersion() {
-    getScalaArtifacts()[0]?.resolvedDependency?.moduleVersion
-}
-
-List getScalaArtifacts() {
-    def scalaEnabledProjects = project.allprojects.findAll { it.plugins.hasPlugin('scala') }
-    def firstScalaConfiguration = scalaEnabledProjects?.asList()[0]?.configurations['scalaTools']
-    firstScalaConfiguration?.resolvedConfiguration?.resolvedArtifacts?.findAll { it.resolvedDependency.configuration == 'default' }?.asList() ?: []
+idea.workspace.iws {
+    withXml { provider ->
+        def runManagerComponent = provider.asNode().component.find { it.'@name' == 'RunManager'}
+        def defaultJunitConfig = runManagerComponent.configuration.find {(it.'@default' == 'true') && (it.'@type' == 'JUnit')}
+        def workingDirectoryOption = defaultJunitConfig.option.find {it.'@name' == 'WORKING_DIRECTORY'}
+        workingDirectoryOption.'@value' = '$MODULE_DIR$'
+    }
 }
